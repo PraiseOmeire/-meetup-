@@ -1,25 +1,25 @@
-import React from "react";
+import React, {useEffect} from "react";
 import ReactDOM from "react-dom";
 import "./App.css";
 import App from "./App";
 import {BrowserRouter as Router} from "react-router-dom";
-// import setAuthToken from "./utils/setAuthToken";
-// import {loadUser} from "./reducers/auth";
+import setAuthToken from "./utils/setAuthToken";
+import {loadUser} from "./reducers/auth";
 
 //redux
 
 import {store} from "./store";
 import {Provider} from "react-redux";
 
-// if (localStorage.token) {
-//   setAuthToken(localStorage.token);
-// }
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 const Root = () => {
-  // useEffect(() => {
-  //   // Load user when component mounts
-  //   store.dispatch(loadUser());
-  // }, []);
+  useEffect(() => {
+    // Load user when component mounts
+    store.dispatch(loadUser());
+  }, []);
 
   return (
     <Provider store={store}>

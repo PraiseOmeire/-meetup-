@@ -1,7 +1,7 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 import {addAlert, addAlertWithTimeout} from "./alert";
-// import setAuthToken from "../utils/setAuthToken";
+import setAuthToken from "../utils/setAuthToken";
 
 const initialState = {
   token: localStorage.getItem("token"),
@@ -11,21 +11,21 @@ const initialState = {
 };
 
 //load user
-// export const loadUser = () => async (dispatch) => {
-//   if (localStorage.token) {
-//     setAuthToken(localStorage.token);
-//   }
-//   try {
-//     const res = await axios.get("/api/auth");
-//     dispatch({
-//       type: "userLoaded",
-//       payload: res.data,
-//     });
-//   } catch (err) {
-//     console.log("error", err);
-//     // dispatch({type: "authError"});
-//   }
-// };
+export const loadUser = () => async (dispatch) => {
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+  try {
+    const res = await axios.get("/api/auth");
+    dispatch({
+      type: "userLoaded",
+      payload: res.data,
+    });
+  } catch (err) {
+    console.log("error", err);
+    dispatch({type: "authError"});
+  }
+};
 
 //Register User
 
@@ -81,18 +81,18 @@ export const authSlice = createSlice({
       state.token = null;
       state.user = null;
     },
-    // authError: (state, action) => {
-    //   state.isAuthenticated = false;
-    //   state.loading = false;
-    //   state.token = null;
-    //   state.user = null;
-    // },
-    // userLoaded: (state, action) => {
-    //   state.isAuthenticated = true;
-    //   state.loading = false;
-    //   state.token = action.payload.token;
-    //   state.user = action.payload.user;
-    // },
+    authError: (state, action) => {
+      state.isAuthenticated = false;
+      state.loading = false;
+      state.token = null;
+      state.user = null;
+    },
+    userLoaded: (state, action) => {
+      state.isAuthenticated = true;
+      state.loading = false;
+      state.token = action.payload.token;
+      state.user = action.payload.user;
+    },
   },
 });
 
