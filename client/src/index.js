@@ -12,7 +12,7 @@ import {store} from "./store";
 import {Provider} from "react-redux";
 
 if (localStorage.token) {
-  setAuthToken(localStorage.token);
+  // setAuthToken(localStorage.token);
 }
 
 const Root = () => {

@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import {createSelector, createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 import {addAlert, addAlertWithTimeout} from "./alert";
 import setAuthToken from "../utils/setAuthToken";
@@ -28,7 +28,6 @@ export const loadUser = () => async (dispatch) => {
 };
 
 //Register User
-
 export const registerUser = createAsyncThunk(
   " auth/registerUser",
   async (formData, {dispatch, rejectWithValue}) => {
@@ -38,6 +37,9 @@ export const registerUser = createAsyncThunk(
       console.log(res, "res");
       dispatch({type: "registerSucess", payload: res.data});
 
+      dispatch(loadUser());
+
+      localStorage.setItem("token", res.data.token);
       return res.data;
     } catch (err) {
       console.log(err, "error");
@@ -65,6 +67,39 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+//login user
+export const loginUser = createAsyncThunk(
+  " auth/loginUser",
+  async (formData, {dispatch, rejectWithValue}) => {
+    try {
+      const res = await axios.post("/api/auth", formData);
+      dispatch({type: "loginSuccess", payload: res.data});
+      dispatch(loginSuccess({}));
+
+      // dispatch(loadUser());
+
+      // localStorage.setItem("token", res.data.token);
+      // return res.data;
+    } catch (err) {
+      console.log(err, "error");
+
+      if (err.response && err.response.data && err.response.data.errors) {
+        const errors = err.response.data.errors;
+        errors.forEach((error) => {
+          if (errors) {
+            dispatch(addAlert({type: "danger", message: error.msg}));
+          }
+        });
+      } else {
+        dispatch(
+          addAlertWithTimeout({type: "danger", message: "An error occurred"})
+        );
+      }
+      return rejectWithValue(err.response?.data);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -75,19 +110,36 @@ export const authSlice = createSlice({
       state.token = action.payload.token;
       state.user = action.payload.user;
     },
+    loginSuccess: (state, action) => {
+      console.log("state", state, action);
+
+      state.isAuthenticated = action.payload.token;
+      state.loading = false;
+      state.token = action.payload.token;
+      state.user = action.payload.user;
+    },
     registerFail: (state, action) => {
       state.isAuthenticated = false;
       state.loading = false;
       state.token = null;
       state.user = null;
     },
-    authError: (state, action) => {
+    loginFail: (state, action) => {
       state.isAuthenticated = false;
       state.loading = false;
       state.token = null;
       state.user = null;
     },
+    authError: (state, action) => {
+      Object.assign(state, {
+        isAuthenticated: true,
+        loading: false,
+        token: null,
+        user: null,
+      });
+    },
     userLoaded: (state, action) => {
+      console.log("userloaded");
       state.isAuthenticated = true;
       state.loading = false;
       state.token = action.payload.token;
@@ -96,6 +148,14 @@ export const authSlice = createSlice({
   },
 });
 
-export const {registerSucess, registerFail} = authSlice.actions;
+export const {
+  registerSucess,
+  registerFail,
+  loginSuccess,
+  loginFail,
+  userLoaded,
+} = authSlice.actions;
+
+export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 
 export default authSlice.reducer;

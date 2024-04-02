@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from "react";
-import {connect, useDispatch} from "react-redux";
+import {useDispatch} from "react-redux";
 import "../../App.css";
 import {Link} from "react-router-dom";
 import {addAlert, addAlertWithTimeout} from "../../reducers/alert";
@@ -32,38 +32,10 @@ const Register = () => {
         // Handle success if needed
       } catch (err) {
         // Handle error
-        // const errors = err.payload || [{message: "An error occurred"}];
-        // errors.forEach((error) =>
-        //   dispatch(addAlert({type: "danger", message: error.message}))
-        // );
-
-        if (err.payload) {
-          err.payload.forEach((error) => {
-            if (error.param === "email") {
-              dispatch(
-                addAlertWithTimeout({
-                  type: "danger",
-                  message: "Email is invalid",
-                })
-              );
-            } else if (error.param === "password") {
-              dispatch(
-                addAlertWithTimeout({
-                  type: "danger",
-                  message: "Password is invalid",
-                })
-              );
-            } else {
-              dispatch(
-                addAlertWithTimeout({type: "danger", message: error.message})
-              );
-            }
-          });
-        } else {
-          dispatch(
-            addAlertWithTimeout({type: "danger", message: "An error occurred"})
-          );
-        }
+        const errors = err.payload || [{message: "An error occurred"}];
+        errors.forEach((error) =>
+          dispatch(addAlert({type: "danger", message: error.message}))
+        );
       }
     }
   };

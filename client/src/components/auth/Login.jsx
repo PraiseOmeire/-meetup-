@@ -1,23 +1,43 @@
-import React, {Fragment, useState} from "react";
-import {Link} from "react-router-dom";
-
+import React, {Fragment, useState, useEffect} from "react";
+import {useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
+import {Link, useNavigate} from "react-router-dom";
+import {addAlert, addAlertWithTimeout} from "../../reducers/alert";
+import {loginUser, selectIsAuthenticated} from "../../reducers/auth";
 import "../../App.css";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
   });
-  const {name, email, password} = formData;
+  const {email, password} = formData;
   const onChange = (e) =>
     setFormData({...formData, [e.target.name]: e.target.value});
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
-    console.log(formData, "Success");
+  console.log("authenticated", isAuthenticated);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await dispatch(loginUser(formData));
+      console.log(formData, "Success");
+    } catch (error) {}
   };
+
+  //redirec if authenticated
+  if (isAuthenticated) {
+    dispatch(selectIsAuthenticated);
+    console.log("authenticated", isAuthenticated);
+    navigate("/dashboard");
+  }
+  // If isAuthenticated is true, navigate to dashboard
+
   return (
     <Fragment>
       <div className="container">
@@ -26,16 +46,6 @@ const Login = () => {
           <i className="fas fa-user"></i> Sign in to Account
         </p>
         <form className="form" onSubmit={onSubmit}>
-          <div className="form-group">
-            <input
-              type="text"
-              placeholder="Name"
-              name="name"
-              value={name}
-              onChange={onChange}
-              required
-            />
-          </div>
           <div className="form-group">
             <input
               type="email"

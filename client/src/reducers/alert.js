@@ -32,7 +32,7 @@ export const {addAlert, removeAlert} = alertSlice.actions;
 export default alertSlice.reducer;
 
 export const addAlertWithTimeout =
-  (alert, timeout = 3000) =>
+  (alert, timeout = 5000) =>
   (dispatch) => {
     dispatch(addAlert(alert));
     setTimeout(() => {

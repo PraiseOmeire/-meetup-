@@ -1,11 +1,11 @@
 import {configureStore} from "@reduxjs/toolkit";
 import logger from "redux-logger";
 import alertSlice from "./reducers/alert";
-// import authSlice from "./reducers/auth";
+import authSlice from "./reducers/auth";
 
 const reducer = {
   alert: alertSlice,
-  // auth: authSlice,
+  auth: authSlice,
 };
 
 export const store = configureStore({
