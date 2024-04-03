@@ -4,7 +4,7 @@ import "./App.css";
 import App from "./App";
 import {BrowserRouter as Router} from "react-router-dom";
 import setAuthToken from "./utils/setAuthToken";
-import {loadUser} from "./reducers/auth";
+import {loadUser} from "./action/auth";
 
 //redux
 

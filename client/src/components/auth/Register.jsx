@@ -2,8 +2,8 @@ import React, {Fragment, useState} from "react";
 import {useDispatch} from "react-redux";
 import "../../App.css";
 import {Link} from "react-router-dom";
-import {addAlert, addAlertWithTimeout} from "../../reducers/alert";
-import {registerUser} from "../../reducers/auth";
+import {showAlert} from "../../action/alert";
+import {registerUser} from "../../action/auth";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ const Register = () => {
     e.preventDefault();
     if (password !== password2) {
       dispatch(
-        addAlertWithTimeout({type: "danger", message: "Passwords dont match"})
+          showAlert({type: "danger", message: "Passwords dont match"})
       );
     } else {
       try {
@@ -34,7 +34,7 @@ const Register = () => {
         // Handle error
         const errors = err.payload || [{message: "An error occurred"}];
         errors.forEach((error) =>
-          dispatch(addAlert({type: "danger", message: error.message}))
+          dispatch(showAlert({type: "danger", message: error.message}))
         );
       }
     }
