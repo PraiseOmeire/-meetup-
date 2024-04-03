@@ -8,21 +8,14 @@ export const alertSlice = createSlice({
   initialState,
   reducers: {
     addAlert: (state, action) => {
-      console.log(action.payload, "payload");
-      state = state.push({...action.payload, id: nextId++});
-      console.log("add Alert state", state);
+      state.push({...action.payload, id: nextId++});
     },
     removeAlert: (state, action) => {
-      console.log("state", state);
-      console.log("removedAlert", action);
       const alertToRemove = state.find(
         (item) => item.message === action.payload.message
       );
-      console.log("alert removed", alertToRemove);
       const newAlert = state.filter((alert) => alert.message !== alertToRemove);
-      console.log("new alert", newAlert);
-
-      state = state.shift();
+      state.shift();
     },
   },
 });
@@ -30,12 +23,3 @@ export const alertSlice = createSlice({
 export const {addAlert, removeAlert} = alertSlice.actions;
 
 export default alertSlice.reducer;
-
-export const addAlertWithTimeout =
-  (alert, timeout = 5000) =>
-  (dispatch) => {
-    dispatch(addAlert(alert));
-    setTimeout(() => {
-      dispatch(removeAlert(alert));
-    }, timeout);
-  };

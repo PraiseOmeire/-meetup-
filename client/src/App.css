@@ -150,11 +150,17 @@ img {
 }
 
 .alert {
-  padding: 0.8rem;
-  margin: 1rem 0;
+  padding: 1rem;
   opacity: 0.9;
   background: var(--light-color);
   color: #333;
+  display: flex;
+  margin-top: 0.5rem;
+  justify-content: space-between;
+}
+
+.alert:first-child {
+  margin-top: 4rem;
 }
 
 .btn-primary,

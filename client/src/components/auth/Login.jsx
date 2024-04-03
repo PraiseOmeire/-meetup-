@@ -2,9 +2,9 @@ import React, {Fragment, useState, useEffect} from "react";
 import {useSelector} from "react-redux";
 import {useDispatch} from "react-redux";
 import {Link, useNavigate} from "react-router-dom";
-import {addAlert, addAlertWithTimeout} from "../../reducers/alert";
-import {loginUser, selectIsAuthenticated} from "../../reducers/auth";
+import {selectIsAuthenticated} from "../../reducers/auth";
 import "../../App.css";
+import {loginUser} from "../../action/auth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -24,15 +24,11 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await dispatch(loginUser(formData));
-      console.log(formData, "Success");
-    } catch (error) {}
+    await dispatch(loginUser(formData));
   };
 
-  //redirec if authenticated
+  //redirect if authenticated
   if (isAuthenticated) {
-    dispatch(selectIsAuthenticated);
     console.log("authenticated", isAuthenticated);
     navigate("/dashboard");
   }
