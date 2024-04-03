@@ -26,7 +26,7 @@ export const authSlice = createSlice({
       state.isAuthenticated = false;
       state.loading = false;
       state.token = null;
-      state.user = 'no user';
+      state.user = null;
     },
     loginFail: (state) => {
       state.isAuthenticated = false;
